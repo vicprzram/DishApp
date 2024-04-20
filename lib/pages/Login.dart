@@ -121,11 +121,21 @@ class Login extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-              ImagesLogin(imagePath: "lib/images/google_logo.png"),
+              InkWell(
+                child: ImagesLogin(imagePath: "lib/images/google_logo.png"),
+                onTap: (){
+                  print("Se ha clicado \"Google\"");
+                },
+              ),
 
               const SizedBox(width: 20,),
 
-              ImagesLogin(imagePath: "lib/images/apple_logo.png")
+            InkWell(
+              child: ImagesLogin(imagePath: "lib/images/apple_logo.png"),
+              onTap: (){
+                print("Se ha clicado \"Apple\"");
+              },
+            )
             ],),
 
             const SizedBox(width: 10,),
