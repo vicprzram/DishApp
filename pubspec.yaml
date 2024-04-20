@@ -17,3 +17,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - lib/images/
+  fonts:
+    - family: Simple_Lemonade
+      fonts:
+      - asset: lib/fonts/Simple_Lemonade.otf
+    - family: Ginger_Cat
+      fonts:
+        - asset: lib/fonts/Ginger_Cat.otf
+        - asset: lib/fonts/Ginger_Cat.ttf
