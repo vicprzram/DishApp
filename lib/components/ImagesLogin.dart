@@ -19,7 +19,6 @@ class ImagesLogin extends StatelessWidget {
         imagePath,
         height: 60,
       ),
-
     );
   }
 }

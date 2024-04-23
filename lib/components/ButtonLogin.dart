@@ -22,7 +22,7 @@ class ButtonLogin extends StatelessWidget {
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+                fontSize: 17.0,
             )
           )
         ),

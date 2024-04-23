@@ -3,6 +3,9 @@ import 'package:dishapp/components/ImagesLogin.dart';
 import 'package:dishapp/components/TextFieldLogin.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'dart:math';
+import 'SignUp.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -16,18 +19,33 @@ class Login extends StatelessWidget {
     print("Se ha pulsado \"Sign In\"");
   }
 
+  void changeRegister(context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+  }
+
+  double textScaleFactor(BuildContext context, double maxWidth, {double maxTextScaleFactor = 2}) {
+    final width = maxWidth;
+    double val = (width / 1400) * maxTextScaleFactor;
+    return max(1, min(val, maxTextScaleFactor));
+  }
+
   @override
   Widget build(BuildContext context){
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xfffeeddd),
       body: SafeArea(
         child: Column(
           children: [
-            
+
             // Logo
             Container(
               alignment: Alignment.topCenter,
-              child: Image.asset("lib/images/main_logo.jpg", height: 210, width: 210,)
+              child: Image.asset("lib/images/main_logo.jpg", height: screenHeight * 0.2, width: screenWidth)
             ),
 
             // Name of app
@@ -35,9 +53,10 @@ class Login extends StatelessWidget {
               alignment: Alignment.center,
               child: RichText(
                   text: TextSpan(
+
                     // Here is the explicit parent TextStyle
                     style: new TextStyle(
-                      fontSize: 50.0,
+                      fontSize: screenWidth * 0.13,
                       color: Colors.black,
                       fontFamily: 'Ginger_Cat',
                       decoration: TextDecoration.underline,
@@ -51,19 +70,17 @@ class Login extends StatelessWidget {
 
             const SizedBox(height: 25),
             // Username
-            TextFieldLogin(
+            TextFieldUsername(
               controller: usernameController,
               hintText: 'Username',
-              obscureText: false,
             ),
 
             const SizedBox(height: 10),
 
             // Password
-            TextFieldLogin(
+            TextFieldPassword(
               controller: passwordController,
               hintText: 'Password',
-              obscureText: true,
             ),
 
             const SizedBox(height: 5),
@@ -155,13 +172,13 @@ class Login extends StatelessWidget {
                               text: 'Not a member?   ',
                               recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                print("Se ha clicado \"Register now\"");
+                                changeRegister(context);
                               }),
                           new TextSpan(
                               text: 'Register now',
                               recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                print("Se ha clicado \"Register now\"");
+                                changeRegister(context);
                               },
                               style: new TextStyle(color: Colors.blue, decoration: TextDecoration.underline)),
                         ],
