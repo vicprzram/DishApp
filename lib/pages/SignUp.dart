@@ -1,7 +1,10 @@
 import 'package:dishapp/components/ButtonLogin.dart';
 import 'package:dishapp/components/TextFieldLogin.dart';
+import 'package:dishapp/pages/Login.dart';
+import 'package:dishapp/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:dishapp/database/Authentication.dart';
 
 class SignUp extends StatefulWidget {
 
@@ -22,6 +25,22 @@ class _SignUpState extends State<SignUp> {
 
   void changeLogin(context){
       Navigator.pop(context);
+  }
+
+  void createAccount(context) async {
+    if(passwordRepeatController.text == passwordController.text){
+      final message = await Authentication().registration(
+          email: emailController.text,
+          password: passwordController.text);
+      if(message!.contains('Success')){
+        Navigator.pop(context);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message))
+      );
+    }else{
+
+    }
   }
 
   @override
@@ -75,7 +94,8 @@ class _SignUpState extends State<SignUp> {
 
           SizedBox(height: 35),
 
-          ButtonLogin(onTap: () {Navigator.pop(context);}, buttonText: "Sign up"),
+          ButtonLogin(
+              onTap: () async {createAccount(context);}, buttonText: "Sign up"),
 
           SizedBox(height: 40),
 

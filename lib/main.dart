@@ -1,7 +1,19 @@
 import 'package:dishapp/pages/Login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(const Main());
+
+bool shouldUseFirebaseEmulator = false;
+
+late final FirebaseApp app;
+late final FirebaseAuth auth;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const Main());
+}
 
 class Main extends StatelessWidget {
   const Main({super.key});

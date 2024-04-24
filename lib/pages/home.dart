@@ -1,4 +1,6 @@
-/*class HomePage extends StatefulWidget {
+import 'package:flutter/material.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
@@ -133,5 +135,5 @@ class _NavigationExampleState extends State<HomePage> {
       ][currentPageIndex],
     );
   }
-}*/
+}
 

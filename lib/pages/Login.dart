@@ -1,9 +1,10 @@
 import 'package:dishapp/components/ButtonLogin.dart';
 import 'package:dishapp/components/ImagesLogin.dart';
 import 'package:dishapp/components/TextFieldLogin.dart';
+import 'package:dishapp/pages/home.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
+import 'package:dishapp/database/Authentication.dart';
 import 'dart:math';
 import 'SignUp.dart';
 
@@ -15,9 +16,16 @@ class Login extends StatelessWidget {
   final passwordController = TextEditingController();
 
   // Sign in user
-  void SignUserIn() {
-    print("Se ha pulsado \"Sign In\"");
-  }
+  void SignUserIn(context) async {
+    final message = await Authentication().login(
+        email: usernameController.text,
+        password: passwordController.text);
+    if(message!.contains('Success')){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage()));
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message))
+    );  }
 
   void changeRegister(context){
     Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
@@ -106,7 +114,7 @@ class Login extends StatelessWidget {
 
             // Sing In
             ButtonLogin(
-              onTap: this.SignUserIn,
+              onTap: () {SignUserIn(context);},
               buttonText: "Sign In",
             ),
 
