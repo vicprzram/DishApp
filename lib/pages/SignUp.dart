@@ -2,6 +2,7 @@ import 'package:dishapp/components/ButtonLogin.dart';
 import 'package:dishapp/components/TextFieldLogin.dart';
 import 'package:dishapp/pages/Login.dart';
 import 'package:dishapp/pages/home.dart';
+import 'package:dishapp/utilities/Utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:dishapp/database/Authentication.dart';
@@ -30,16 +31,17 @@ class _SignUpState extends State<SignUp> {
   void createAccount(context) async {
     if(passwordRepeatController.text == passwordController.text){
       final message = await Authentication().registration(
-          email: emailController.text,
-          password: passwordController.text);
-      if(message!.contains('Success')){
+          user: Usuario(emailController.text.trim(),
+                        usernameController.text.trim(),
+                        passwordController.text.trim()));
+      if(message.contains('Success')){
         Navigator.pop(context);
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message))
       );
     }else{
-
+      SnackBar(content: Text('The passwords do not match'));
     }
   }
 

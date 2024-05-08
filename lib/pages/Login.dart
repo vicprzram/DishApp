@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:dishapp/database/Authentication.dart';
 import 'dart:math';
 import 'SignUp.dart';
+import 'package:dishapp/database/ForgotPassword.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -18,7 +19,7 @@ class Login extends StatelessWidget {
   // Sign in user
   void SignUserIn(context) async {
     final message = await Authentication().login(
-        email: usernameController.text,
+        emailOrPassword: usernameController.text,
         password: passwordController.text);
     if(message!.contains('Success')){
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomePage()));
@@ -80,7 +81,7 @@ class Login extends StatelessWidget {
             // Username
             TextFieldUsername(
               controller: usernameController,
-              hintText: 'Username',
+              hintText: 'Email or Username',
             ),
 
             const SizedBox(height: 10),
@@ -103,7 +104,7 @@ class Login extends StatelessWidget {
                     style: TextStyle(color: Colors.grey[700]),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print('Se ha clicado \"Forgot password?\"');
+                        print("caca");
                       }),
                   )
                 ]

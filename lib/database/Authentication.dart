@@ -1,14 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:dishapp/utilities/Utilities.dart';
 
 class Authentication {
   Future<String> registration({
-    required String email,
-    required String password,
+    required Usuario user
   }) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email,
-          password: password);
+          email: user.email,
+          password: user.password);
+      await FirebaseDatabase.instance.ref('users').set({
+        user.username : {
+          "email" : user.email
+        }
+      });
       return 'Success';
     } on FirebaseAuthException catch(e){
       if (e.code == 'weak-password') {
@@ -24,14 +31,31 @@ class Authentication {
   }
 
   Future<String?> login({
-    required String email,
+    required String emailOrPassword,
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      if(emailOrPassword.contains('@')){
+        print("Entre");
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailOrPassword,
+          password: password,
+        );
+      }else{
+        DatabaseReference databaseReference = FirebaseDatabase.instance.ref('users/$emailOrPassword').child('email');
+        var snapshot = await databaseReference.get();
+        final String email = snapshot.value.toString();
+        if(email.isEmpty == false){
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          );
+          print("Esta correcto");
+        }else{
+          return 'No user found for that username';
+        }
+      }
+
       return 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

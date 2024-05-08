@@ -50,21 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCzv5c-dPdKzAMF7frisf1gEiy31lTg6WE',
-    appId: '1:51421316781:android:fa6902db2bf751d54be824',
-    messagingSenderId: '51421316781',
-    projectId: 'dishapp-5116e',
-    storageBucket: 'dishapp-5116e.appspot.com',
+    apiKey: 'AIzaSyBQtfvxxxMhjqVTzGOYWOCUUYxRzCczUOo',
+    appId: '1:20670541569:android:37d37dabc55ed65e09b500',
+    messagingSenderId: '20670541569',
+    projectId: 'dishapp-c9fa1',
+    storageBucket: 'dishapp-c9fa1.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBkm4GpNQy8ftHRXvE2BuGXCocLeZBMHAo',
-    appId: '1:51421316781:ios:8b922e6c24f4e66d4be824',
-    messagingSenderId: '51421316781',
-    projectId: 'dishapp-5116e',
-    storageBucket: 'dishapp-5116e.appspot.com',
-    iosClientId: '51421316781-h4ojo89foi2a60lnf2fmpf6eqbcq872r.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD7t-l3Ns5g9KAzf-JUDUODIoikFfg5sPU',
+    appId: '1:20670541569:ios:60352740dd8f27f809b500',
+    messagingSenderId: '20670541569',
+    projectId: 'dishapp-c9fa1',
+    storageBucket: 'dishapp-c9fa1.appspot.com',
+    iosClientId: '20670541569-fo0m0pc8mjtr9jv708rq81gph7jci22k.apps.googleusercontent.com',
     iosBundleId: 'com.example.dishapp',
   );
-
 }
