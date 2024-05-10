@@ -93,3 +93,44 @@ class TextFieldUsername extends StatelessWidget {
     );
   }
 }
+
+
+class TextFieldRecipe extends StatelessWidget {
+
+  final controller;
+  final String hintText;
+  final alignment;
+  final int maxLines;
+
+  const TextFieldRecipe({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.alignment,
+    required this.maxLines
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: TextField(
+          controller: controller,
+          textAlign: alignment,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide(color: Color(0xff59be32)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            fillColor: Colors.white,
+            filled: true,
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.grey[500], ),
+          ),
+        ));
+  }
+
+}

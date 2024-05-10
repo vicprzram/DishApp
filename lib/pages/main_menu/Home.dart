@@ -22,9 +22,9 @@ class _HomeState extends State<Home> {
             /// Search bar
             Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+              margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
               child: TextField(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
