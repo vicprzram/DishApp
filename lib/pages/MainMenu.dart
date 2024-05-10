@@ -1,3 +1,4 @@
+import 'package:dishapp/pages/main_menu/Home.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,40 +22,41 @@ class _NavigationExampleState extends State<HomePage> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black,
-
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.favorite),
-            icon: Icon(Icons.favorite_outline),
-            label: 'Favourites',
-          ),
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.shopping_cart),
-            icon: Icon(Icons.shopping_cart_outlined),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.person),
-            icon: Icon(Icons.person_outline),
-            label: 'User',
-          ),
-        ],
+      bottomNavigationBar: new Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Color(0xfffeeddd)),
+          child: BottomNavigationBar(
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.black,
+            backgroundColor: Color(0xfffeeddd),
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.home),
+                icon: Icon(Icons.home_outlined),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.favorite),
+                icon: Icon(Icons.favorite_outline),
+                label: 'Favourites',
+              ),
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.shopping_cart),
+                icon: Icon(Icons.shopping_cart_outlined),
+                label: 'Cart',
+              ),
+              BottomNavigationBarItem(
+                activeIcon: Icon(Icons.person),
+                icon: Icon(Icons.person_outline),
+                label: 'User',
+              ),
+            ],
         currentIndex: currentPageIndex,
         onTap: _onItemTapped,
-      ),
+      )),
       body: <Widget>[
         /// Home page
-        Card(
-
-        ),
+        Home(),
 
         /// Notifications page
         const Padding(
@@ -120,6 +122,8 @@ class _NavigationExampleState extends State<HomePage> {
             );
           },
         ),
+
+        /// User page
         Card(
           shadowColor: Colors.transparent,
           margin: const EdgeInsets.all(8.0),

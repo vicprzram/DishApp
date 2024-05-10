@@ -1,7 +1,7 @@
 import 'package:dishapp/components/ButtonLogin.dart';
 import 'package:dishapp/components/ImagesLogin.dart';
 import 'package:dishapp/components/TextFieldLogin.dart';
-import 'package:dishapp/pages/home.dart';
+import 'package:dishapp/pages/MainMenu.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dishapp/database/Authentication.dart';
