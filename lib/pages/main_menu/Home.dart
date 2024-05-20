@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
             alignment: Alignment.bottomRight,
             margin: const EdgeInsets.only(left: 0, right: 5.0),
             child: FloatingActionButton.extended(
-              onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => DynamicTextFieldPage())); },
+              onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => AddrecipeWidget())); },
               label: Text("New recipe"),
               icon: Icon(Icons.add),
               backgroundColor: Color(0xff59be32),

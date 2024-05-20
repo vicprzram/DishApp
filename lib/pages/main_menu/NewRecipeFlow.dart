@@ -29,6 +29,16 @@ class AddrecipeModel extends FlutterFlowModel<AddrecipeWidget> {
   TextEditingController? descriptionController;
   String? Function(BuildContext, String?)? descriptionValidator;
 
+  // Total time
+  FocusNode? timeFocusNode;
+  TextEditingController? timeController;
+  String? Function(BuildContext, String?)? timeValidator;
+
+  // Diners
+  FocusNode? dinersFocusNode;
+  TextEditingController? dinersController;
+  String? Function(BuildContext, String?)? dinersValidator;
+
   // Ingredients
   List<FocusNode?> ingredientsFocusNode = [];
   List<TextEditingController?> ingredientsController = [];
@@ -111,7 +121,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
       builder: (context) => CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: Text('Photo Gallery'),
+            child: Text('Gallery'),
             onPressed: () {
               // close the options modal
               Navigator.of(context).pop();
@@ -228,12 +238,11 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
   }
 
 
-
+  List<String> dropdownItems = ["Hours", "Minutes", "Seconds"];
+  late String dropdownValue = dropdownItems[2];
 
   @override
   Widget build(BuildContext context) {
-
-
 
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
@@ -309,7 +318,70 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                   ),
 
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(25, 15, 25, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 0),
+                    child: Row(
+                      children: [
+
+                        SizedBox(
+                          width: 110,
+                          height: 50,
+                          child: MainTextField(
+                              controller: _model.timeController,
+                              focus: _model.timeFocusNode,
+                              validator: _model.timeValidator,
+                              label: 'Total time',
+                              isPassword: false,
+                              textAlign: TextAlign.center,
+                              maxLines: 1),
+                        ),
+
+                        SizedBox(width: 10),
+
+                        SizedBox(
+                          height: 50,
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            underline: Container(
+                              height: 2,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                dropdownValue = value!;
+                              });
+                            },
+                            items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+
+                        SizedBox(width: 50,),
+
+                        SizedBox(
+                          width: 70,
+                          height: 50,
+                          child: MainTextField(
+                              controller: _model.dinersController,
+                              focus: _model.dinersFocusNode,
+                              validator: _model.dinersValidator,
+                              label: 'Diners',
+                              isPassword: false,
+                              textAlign: TextAlign.center,
+                              maxLines: 1),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(24, 15, 25, 0),
                     child: Card(
                       surfaceTintColor: Colors.white,
                       elevation: 3,
@@ -319,7 +391,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
 
                           SizedBox(height: 5),
 
-                          Padding(padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          Padding(padding: const EdgeInsets.symmetric(horizontal: 10.0),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
