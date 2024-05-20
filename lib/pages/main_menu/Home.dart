@@ -1,5 +1,8 @@
+import 'package:dishapp/pages/main_menu/NewRecipeFlow.dart';
 import 'package:flutter/material.dart';
 import 'package:dishapp/pages/main_menu/NewRecipe.dart';
+
+import 'a.dart';
 
 class Home extends StatefulWidget {
 
@@ -15,6 +18,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: Container(
+            alignment: Alignment.bottomRight,
+            margin: const EdgeInsets.only(left: 0, right: 5.0),
+            child: FloatingActionButton.extended(
+              onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => DynamicTextFieldPage())); },
+              label: Text("New recipe"),
+              icon: Icon(Icons.add),
+              backgroundColor: Color(0xff59be32),
+            )),
         backgroundColor: Color(0xfffeeddd),
         body: SafeArea(
           child: Column(children: [
@@ -45,16 +58,7 @@ class _HomeState extends State<Home> {
             ),
 
 
-            /// New recipe
-            Container(
-              alignment: Alignment.bottomRight,
-              margin: const EdgeInsets.only(left: 0, right: 5.0),
-              child: FloatingActionButton.extended(
-                onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => NewRecipe())); },
-                label: Text("New recipe"),
-                icon: Icon(Icons.add),
-                backgroundColor: Color(0xff59be32),
-              )),
+
           ])
         )
     );

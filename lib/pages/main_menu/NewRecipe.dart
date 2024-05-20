@@ -17,6 +17,7 @@ class _NewRecipeState extends State<NewRecipe> {
   ///Controllers
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  List listControllersIngredients = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +41,9 @@ class _NewRecipeState extends State<NewRecipe> {
 
           const SizedBox(height: 35),
 
-          TextFieldRecipe(controller: titleController, hintText: 'Title', alignment: TextAlign.center, maxLines: 1),
 
           const SizedBox(height: 15),
 
-          TextFieldRecipe(controller: descriptionController, hintText: 'Add some description...', alignment: TextAlign.start, maxLines: 4),
 
           const SizedBox(height: 15),
 
@@ -55,6 +54,8 @@ class _NewRecipeState extends State<NewRecipe> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+
+                SizedBox(height: 5),
 
                 Padding(padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
@@ -68,6 +69,20 @@ class _NewRecipeState extends State<NewRecipe> {
                     )
                 ),
 
+                SizedBox(height: 10),
+
+                Column(
+                  children: [ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: listControllersIngredients.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return newIngredient();
+                    },
+                  )]),
+
+                FloatingActionButton(onPressed: generateIngredient),
 
             ],),
           ),
@@ -76,4 +91,27 @@ class _NewRecipeState extends State<NewRecipe> {
     );
   }
 
+  Widget newIngredient(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: const [
+        SizedBox(
+          height: 50,
+          width: 280,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder()
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  void generateIngredient(){
+    TextEditingController controller = TextEditingController();
+    setState(() {
+      listControllersIngredients.add(controller);
+    });
+  }
 }

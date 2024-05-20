@@ -2,6 +2,7 @@ import 'package:dishapp/components/ButtonLogin.dart';
 import 'package:dishapp/components/ImagesLogin.dart';
 import 'package:dishapp/components/TextFields.dart';
 import 'package:dishapp/pages/MainMenu.dart';
+import 'package:dishapp/pages/caca.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dishapp/database/Authentication.dart';
@@ -79,18 +80,12 @@ class Login extends StatelessWidget {
 
             const SizedBox(height: 25),
             // Username
-            TextFieldUsername(
-              controller: usernameController,
-              hintText: 'Email or Username',
-            ),
+
 
             const SizedBox(height: 10),
 
             // Password
-            TextFieldPassword(
-              controller: passwordController,
-              hintText: 'Password',
-            ),
+
 
             const SizedBox(height: 5),
 
@@ -104,7 +99,8 @@ class Login extends StatelessWidget {
                     style: TextStyle(color: Colors.grey[700]),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print("caca");
+                        print("Y nos fuimo");
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SplashWidget()));
                       }),
                   )
                 ]

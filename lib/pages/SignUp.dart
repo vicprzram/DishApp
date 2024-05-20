@@ -80,19 +80,15 @@ class _SignUpState extends State<SignUp> {
 
           SizedBox(height: 10),
 
-          TextFieldUsername(controller: emailController, hintText: "Email"),
 
           SizedBox(height: 5),
 
-          TextFieldUsername(controller: usernameController, hintText: "Username"),
 
           SizedBox(height: 5),
 
-          TextFieldPassword(controller: passwordController, hintText: "Password"),
 
           SizedBox(height: 5),
 
-          TextFieldPassword(controller: passwordRepeatController, hintText: "Repeat password"),
 
           SizedBox(height: 35),
 
