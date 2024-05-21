@@ -5,11 +5,8 @@ import 'package:dishapp/components/TextFields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 
 class AddrecipeModel extends FlutterFlowModel<AddrecipeWidget> {
   ///  State fields for stateful widgets in this page.
@@ -43,7 +40,14 @@ class AddrecipeModel extends FlutterFlowModel<AddrecipeWidget> {
   List<FocusNode?> ingredientsFocusNode = [];
   List<TextEditingController?> ingredientsController = [];
   List<String? Function(BuildContext, String?)?> ingredientsValidator = [];
+  List<Widget> ingredientFields = [];
 
+  // Steps
+  List<FocusNode?> stepsFocusNode = [];
+  List<TextEditingController?> stepsController = [];
+  List<String? Function(BuildContext, String?)?> stepsValidator = [];
+  List<Widget> stepsFields = [];
+  
   @override
   void initState(BuildContext context) {}
 
@@ -67,8 +71,99 @@ class AddrecipeWidget extends StatefulWidget {
 
 class _AddrecipeWidgetState extends State<AddrecipeWidget> {
   late AddrecipeModel _model;
-
+  List<String> dropdownItems = ["Hours", "Minutes", "Seconds"];
+  late String dropdownValue = dropdownItems[2];
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  bool executed = false;
+  int step = 1;
+
+  void _removeIngredient(TextEditingController controller) {
+    setState(() {
+      int index = _model.ingredientsController.indexOf(controller);
+      if (index != -1) {
+        _model.ingredientsController.removeAt(index);
+        _model.ingredientFields.removeAt(index);
+      }
+    });
+    controller.dispose();
+  }
+
+  void _addIngredient() {
+    final controller = TextEditingController();
+    _model.ingredientsController.add(controller);
+    setState(() {
+      _model.ingredientFields.add(
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+          child: Row(
+            children: [
+              Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: TextFormField(
+                      controller: controller,
+                      textAlign: TextAlign.start,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        labelText: 'New ingredient',
+                        labelStyle:
+                        FlutterFlowTheme.of(context).labelLarge.override(
+                          fontFamily: 'Outfit',
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          letterSpacing: 0,
+                        ),
+                        hintStyle:
+                        FlutterFlowTheme.of(context).labelLarge.override(
+                          fontFamily: 'Outfit',
+                          letterSpacing: 0,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xff59be32),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xFF59BE32),
+                            width: 4,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).error,
+                            width: 4,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).error,
+                            width: 4,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+
+                      ),
+                    ),
+                  )
+              ),
+              IconButton(
+                icon: Icon(Icons.highlight_remove, color: Colors.red),
+                onPressed: () {
+                  _removeIngredient(controller);
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
 
   @override
   void initState() {
@@ -121,7 +216,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
       builder: (context) => CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
-            child: Text('Gallery'),
+            child: Text('Gallery', style: TextStyle(color: Color(0xff59be32)),),
             onPressed: () {
               // close the options modal
               Navigator.of(context).pop();
@@ -130,7 +225,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
             },
           ),
           CupertinoActionSheetAction(
-            child: Text('Camera'),
+            child: Text('Camera', style: TextStyle(color: Color(0xff59be32))),
             onPressed: () {
               // close the options modal
               Navigator.of(context).pop();
@@ -146,103 +241,13 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
 
 
 
-  List<TextEditingController> _controllers = [];
-  List<Widget> _textFields = [];
-
-  void _removeTextField(TextEditingController controller) {
-    setState(() {
-      int index = _controllers.indexOf(controller);
-      if (index != -1) {
-        _controllers.removeAt(index);
-        _textFields.removeAt(index);
-      }
-    });
-    controller.dispose();
-  }
-
-  void _addTextField() {
-    final controller = TextEditingController();
-    _controllers.add(controller);
-    setState(() {
-      _textFields.add(
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
-          child: Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 50,
-                  child: TextFormField(
-                    controller: controller,
-                    textAlign: TextAlign.start,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      labelText: 'New ingredient',
-                      labelStyle:
-                      FlutterFlowTheme.of(context).labelLarge.override(
-                        fontFamily: 'Outfit',
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        letterSpacing: 0,
-                      ),
-                      hintStyle:
-                      FlutterFlowTheme.of(context).labelLarge.override(
-                        fontFamily: 'Outfit',
-                        letterSpacing: 0,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xff59be32),
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFF59BE32),
-                          width: 4,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).error,
-                          width: 4,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).error,
-                          width: 4,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-
-                    ),
-                  ),
-                )
-                ),
-              IconButton(
-                icon: Icon(Icons.highlight_remove, color: Colors.red),
-                onPressed: () {
-                  _removeTextField(controller);
-                },
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
-
-
-  List<String> dropdownItems = ["Hours", "Minutes", "Seconds"];
-  late String dropdownValue = dropdownItems[2];
-
   @override
   Widget build(BuildContext context) {
+
+    if(!executed){
+      _addIngredient();
+      executed = true;
+    }
 
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
@@ -251,10 +256,10 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xfffeeddd),
-          title: Text('New Recipe'),
+          title: Text('New Recipe', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
           actions: <Widget>[
-            IconButton(onPressed: () {  }, icon: Icon(Icons.save)),
-            IconButton(onPressed: () {  }, icon: Icon(Icons.delete))
+            IconButton(onPressed: () {  }, icon: Icon(Icons.save, color: Colors.black,)),
+            IconButton(onPressed: () {  }, icon: Icon(Icons.delete, color: Colors.black,))
           ],
         ),
         key: scaffoldKey,
@@ -268,7 +273,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(25, 0, 25, 0),
                     child: Container(
                       //width: double.infinity,
                       decoration: BoxDecoration(
@@ -313,72 +318,94 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                       focus: _model.descriptionFocusNode,
                       isPassword: false,
                       textAlign: TextAlign.start,
-                      maxLines: 4,
+                      maxLines: 3,
                     )
                   ),
 
+
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(25, 10, 25, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(30, 10, 25, 0),
+                    child: Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: TextStyle(fontFamily: 'Outfit', color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
+                              text: 'Total time: ',
+                          ),
+                        ),
+
+                        SizedBox(width: 5,),
+
+                        SizedBox(
+                          width: 60,
+                         height: 50,
+                         child: MainTextField(
+                              controller: _model.timeController,
+                              focus: _model.timeFocusNode,
+                              validator: _model.timeValidator,
+                              label: '',
+                              isPassword: false,
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              textInputType: TextInputType.number),
+                        ),
+
+                        SizedBox(width: 15,),
+
+                        DropdownButton(
+                            value: dropdownValue,
+                            //underline: SizedBox(),
+                            items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(fontFamily: 'Outfit', fontSize: 18.0, color: Colors.black),
+                                    text: value
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            dropdownValue = value!;
+                          });
+                        }
+                        )
+                      ],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(32, 10, 25, 0),
                     child: Row(
                       children: [
 
+                        RichText(
+                        text: TextSpan(
+                          style: TextStyle(fontFamily: 'Outfit', color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
+                          text: 'Diners: ',
+                        ),
+                      ),
+
+                        SizedBox(width: 35,),
+
                         SizedBox(
-                          width: 110,
+                          width: 60,
                           height: 50,
                           child: MainTextField(
                               controller: _model.timeController,
                               focus: _model.timeFocusNode,
                               validator: _model.timeValidator,
-                              label: 'Total time',
+                              label: '',
                               isPassword: false,
                               textAlign: TextAlign.center,
-                              maxLines: 1),
+                              maxLines: 1,
+                              textInputType: TextInputType.number),
                         ),
 
-                        SizedBox(width: 10),
-
-                        SizedBox(
-                          height: 50,
-                          child: DropdownButton<String>(
-                            value: dropdownValue,
-                            icon: const Icon(Icons.arrow_downward),
-                            elevation: 16,
-                            underline: Container(
-                              height: 2,
-                              color: Colors.deepPurpleAccent,
-                            ),
-                            onChanged: (String? value) {
-                              // This is called when the user selects an item.
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            },
-                            items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-
-                        SizedBox(width: 50,),
-
-                        SizedBox(
-                          width: 70,
-                          height: 50,
-                          child: MainTextField(
-                              controller: _model.dinersController,
-                              focus: _model.dinersFocusNode,
-                              validator: _model.dinersValidator,
-                              label: 'Diners',
-                              isPassword: false,
-                              textAlign: TextAlign.center,
-                              maxLines: 1),
-                        ),
                       ],
-                    ),
-                  ),
+                    )),
 
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(24, 15, 25, 0),
@@ -391,13 +418,13 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
 
                           SizedBox(height: 5),
 
-                          Padding(padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     RichText(text: TextSpan(
                                       text: 'Ingredients',
-                                      style: TextStyle(color: Colors.black, decoration: TextDecoration.underline, fontSize: 20),
+                                      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                                     ))
                                   ]
                               )
@@ -410,9 +437,9 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
-                                itemCount: _textFields.length,
+                                itemCount: _model.ingredientFields.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return _textFields[index];
+                                  return _model.ingredientFields[index];
 
                                 }
                               )]),
@@ -426,7 +453,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                                   backgroundColor: Colors.grey[700],
 
                                 ),
-                                onPressed: _addTextField,
+                                onPressed: _addIngredient,
                                 child: Text("Add new ingredient"),
 
                               ),)
@@ -437,7 +464,87 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
 
                         ],),
                     ),
-                  )
+                  ),
+
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(24, 15, 25, 0),
+                    child: Card(
+                      surfaceTintColor: Colors.white,
+                      elevation: 3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: IconButton(
+                                      icon: Icon(Icons.add, color: Color(0xff59be32),),
+                                      onPressed: () {
+
+
+
+                                      },
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: RichText(text: TextSpan(
+                                      style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                                      text: 'Steps'
+                                    ))),
+
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      icon: Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () {
+
+
+
+                                      },
+                                    ),
+                                  )
+                              ],
+                            ),
+
+                          SizedBox(height: 10,),
+
+                          Container(
+                            child: Column(
+                              children: [
+                                Padding(padding: EdgeInsetsDirectional.fromSTEB(15, 15, 25, 0),
+                                  child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: RichText(text: TextSpan(
+                                        style: TextStyle(color: Colors.grey[900], fontSize: 20, fontStyle: FontStyle.italic),
+                                        text: 'Step $step'),),
+                                  )
+                                ),
+
+                                Padding(padding: EdgeInsetsDirectional.fromSTEB(15, 15, 25, 0),
+                                    child: Align(
+                                      alignment: Alignment.topRight,
+                                      child: MainTextField(
+                                        controller: TextEditingController(),
+                                        focus: FocusNode(),
+                                        isPassword: false,
+                                        label: 'Add information about the step $step',
+                                        maxLines: 2,
+                                        validator: _model.timeValidator,
+                                        textAlign: TextAlign.start,
+                                      )
+                                    )
+                                ),
+                              ],
+                            ),
+                          )
+
+                        ]))),
+
+                  SizedBox(height: 40,)
+
                 ],
               ),
             ),

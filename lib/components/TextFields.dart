@@ -1,4 +1,5 @@
 import 'package:dishapp/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -11,8 +12,9 @@ class MainTextField extends StatefulWidget{
   final bool isPassword;
   final textAlign;
   final int maxLines;
+  TextInputType textInputType;
 
-  const MainTextField({
+  MainTextField({
     required this.controller,
     required this.focus,
     required this.validator,
@@ -20,6 +22,7 @@ class MainTextField extends StatefulWidget{
     required this.isPassword,
     required this.textAlign,
     required this.maxLines,
+    this.textInputType = TextInputType.text
   });
 
   @override
@@ -31,6 +34,7 @@ class MainTextField extends StatefulWidget{
     isPassword: isPassword,
     textAlign: textAlign,
     maxLines: maxLines,
+    textInputType: textInputType
   );
 
 }
@@ -44,6 +48,7 @@ class MainTextFieldState extends State<MainTextField> {
   final bool isPassword;
   final textAlign;
   final int maxLines;
+  final TextInputType textInputType;
 
   MainTextFieldState({
     required this.controller,
@@ -53,6 +58,7 @@ class MainTextFieldState extends State<MainTextField> {
     required this.isPassword,
     required this.textAlign,
     required this.maxLines,
+    required this.textInputType
   });
 
   late bool obscureText = isPassword;
@@ -67,6 +73,7 @@ class MainTextFieldState extends State<MainTextField> {
       obscureText: obscureText,
       textAlign: textAlign,
       maxLines: maxLines,
+      keyboardType: this.textInputType,
       decoration: InputDecoration(
         labelText: this.label,
         labelStyle:
