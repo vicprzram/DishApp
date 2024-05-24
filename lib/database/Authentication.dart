@@ -8,9 +8,9 @@ class Authentication {
     required Usuario user
   }) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: user.email,
-          password: user.password);
+      UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: user.email, password: user.password);
+      User? u = result.user;
+      u?.updateDisplayName(user.username);
       await FirebaseDatabase.instance.ref('users').set({
         user.username : {
           "email" : user.email
@@ -36,7 +36,6 @@ class Authentication {
   }) async {
     try {
       if(emailOrPassword.contains('@')){
-        print("Entre");
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailOrPassword,
           password: password,
@@ -50,7 +49,6 @@ class Authentication {
             email: email,
             password: password,
           );
-          print("Esta correcto");
         }else{
           return 'No user found for that username';
         }
@@ -70,4 +68,25 @@ class Authentication {
     }
   }
 
+  static String getUsername (String email)  {
+
+    DatabaseReference databaseReference =
+    FirebaseDatabase.instance.ref('users');
+    databaseReference.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.children;
+      print(data);
+    });
+
+    return 'a';
+    /*
+    DatabaseReference databaseReference = FirebaseDatabase.instance.ref('users');
+    var snapshot = await databaseReference.get();
+    final String username = snapshot.children as String;
+    print(username);
+    if(email.isEmpty == false){
+      return '';
+    }else{
+      return 'null';
+    }*/
+  }
 }

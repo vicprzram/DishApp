@@ -1,7 +1,8 @@
 
 import 'dart:io';
-
+import 'package:dishapp/database/Authentication.dart';
 import 'package:dishapp/components/TextFields.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -37,15 +38,11 @@ class AddrecipeModel extends FlutterFlowModel<AddrecipeWidget> {
   String? Function(BuildContext, String?)? dinersValidator;
 
   // Ingredients
-  List<FocusNode?> ingredientsFocusNode = [];
   List<TextEditingController?> ingredientsController = [];
-  List<String? Function(BuildContext, String?)?> ingredientsValidator = [];
   List<Widget> ingredientFields = [];
 
   // Steps
-  List<FocusNode?> stepsFocusNode = [];
   List<TextEditingController?> stepsController = [];
-  List<String? Function(BuildContext, String?)?> stepsValidator = [];
   List<Widget> stepsFields = [];
   
   @override
@@ -165,6 +162,106 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
     });
   }
 
+  void _removeStep() {
+    setState(() {
+      int index = _model.stepsFields.length - 1;
+      if (index != -1) {
+        _model.stepsFields.removeAt(index);
+        _model.stepsController.removeAt(index);
+        step--;
+      }
+    });
+  }
+
+  void _addStep() {
+    final controller = TextEditingController();
+    _model.stepsController.add(controller);
+    setState(() {
+      _model.stepsFields.add(
+          Container(
+            child: Column(
+              children: [
+
+                Padding(padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 5),
+                  child: Divider(
+                    thickness: 1,
+                    color: Colors.grey[400],
+                  ),),
+
+                Padding(padding: EdgeInsetsDirectional.fromSTEB(15, 0, 25, 0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: RichText(text: TextSpan(
+                          style: TextStyle(color: Colors.grey[900], fontSize: 20, fontStyle: FontStyle.italic),
+                          text: 'Step $step'),),
+                    )
+                ),
+
+                Padding(padding: EdgeInsetsDirectional.fromSTEB(50, 15, 10, 10),
+                    child: Align(
+                        alignment: Alignment.topRight,
+                        child: TextFormField(
+                          controller: controller,
+                          textAlign: TextAlign.start,
+                          maxLines: 2,
+                          decoration: InputDecoration(
+                            labelText: 'Add information about the step $step',
+                            labelStyle:
+                            FlutterFlowTheme.of(context).labelLarge.override(
+                              fontFamily: 'Outfit',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              letterSpacing: 0,
+                            ),
+                            hintStyle:
+                            FlutterFlowTheme.of(context).labelLarge.override(
+                              fontFamily: 'Outfit',
+                              letterSpacing: 0,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xff59be32),
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFF59BE32),
+                                width: 4,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 4,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 4,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+
+                          ),
+                        ),
+                    )
+                ),
+
+
+              ],
+            ),
+          )
+      );
+      step++;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -238,9 +335,6 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -258,7 +352,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
           backgroundColor: Color(0xfffeeddd),
           title: Text('New Recipe', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
           actions: <Widget>[
-            IconButton(onPressed: () {  }, icon: Icon(Icons.save, color: Colors.black,)),
+            IconButton(onPressed: () { print( FirebaseAuth.instance.currentUser?.displayName); }, icon: Icon(Icons.send, color: Colors.black,)),
             IconButton(onPressed: () {  }, icon: Icon(Icons.delete, color: Colors.black,))
           ],
         ),
@@ -482,9 +576,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                                     child: IconButton(
                                       icon: Icon(Icons.add, color: Color(0xff59be32),),
                                       onPressed: () {
-
-
-
+                                        _addStep();
                                       },
                                     ),
                                   ),
@@ -500,9 +592,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                                     child: IconButton(
                                       icon: Icon(Icons.delete, color: Colors.red),
                                       onPressed: () {
-
-
-
+                                        _removeStep();
                                       },
                                     ),
                                   )
@@ -511,35 +601,16 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
 
                           SizedBox(height: 10,),
 
-                          Container(
-                            child: Column(
-                              children: [
-                                Padding(padding: EdgeInsetsDirectional.fromSTEB(15, 15, 25, 0),
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: RichText(text: TextSpan(
-                                        style: TextStyle(color: Colors.grey[900], fontSize: 20, fontStyle: FontStyle.italic),
-                                        text: 'Step $step'),),
-                                  )
-                                ),
-
-                                Padding(padding: EdgeInsetsDirectional.fromSTEB(15, 15, 25, 0),
-                                    child: Align(
-                                      alignment: Alignment.topRight,
-                                      child: MainTextField(
-                                        controller: TextEditingController(),
-                                        focus: FocusNode(),
-                                        isPassword: false,
-                                        label: 'Add information about the step $step',
-                                        maxLines: 2,
-                                        validator: _model.timeValidator,
-                                        textAlign: TextAlign.start,
-                                      )
-                                    )
-                                ),
-                              ],
-                            ),
-                          )
+                          Column(
+                              children: [ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: _model.stepsFields.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return _model.stepsFields[index];
+                                  }
+                              )]),
 
                         ]))),
 

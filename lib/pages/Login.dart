@@ -33,12 +33,6 @@ class Login extends StatelessWidget {
     Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 
-  double textScaleFactor(BuildContext context, double maxWidth, {double maxTextScaleFactor = 2}) {
-    final width = maxWidth;
-    double val = (width / 1400) * maxTextScaleFactor;
-    return max(1, min(val, maxTextScaleFactor));
-  }
-
   @override
   Widget build(BuildContext context){
 
