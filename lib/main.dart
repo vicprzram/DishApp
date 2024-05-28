@@ -1,5 +1,7 @@
 import 'package:dishapp/pages/Login.dart';
 import 'package:dishapp/pages/LoginFlow.dart';
+import 'package:dishapp/pages/MainMenu.dart';
+import 'package:dishapp/pages/main_menu/HomeFlow.dart';
 import 'package:dishapp/pages/main_menu/NewRecipeFlow.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +26,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
-      home: LoginWidget(),
+      home: HomePage(),
     );
   }
 }

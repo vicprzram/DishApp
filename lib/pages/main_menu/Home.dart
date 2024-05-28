@@ -13,6 +13,8 @@ class Home extends StatefulWidget {
 
 }
 
+List<String> PRUEBA = ["caca", "caca1", "caca3", "caca4", "caca5", "caca6", "caca7", "caca8"];
+
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,9 @@ class _HomeState extends State<Home> {
               backgroundColor: Color(0xff59be32),
             )),
         backgroundColor: Color(0xfffeeddd),
-        body: SafeArea(
+        body: SingleChildScrollView(child: SafeArea(
+          top: true,
+          bottom: true,
           child: Column(children: [
 
             /// Search bar
@@ -51,16 +55,50 @@ class _HomeState extends State<Home> {
               )
             ),
 
+            SizedBox(height: 20,),
+
             /// Recycler view
             Container(
-              height: 620,
-              child: ListView(),
+              height: 650,
+              child: GridView.builder(
+                itemCount: PRUEBA.length,
+                itemBuilder: (context, index){
+
+
+                  return Container(
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blueAccent),
+                        borderRadius: BorderRadius.circular(29)
+                    ),
+                    child: Column(
+                      children: [
+                        Row(children: [Text("Usuario")],),
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent),
+                              borderRadius: BorderRadius.circular(29)
+                          ),
+                        ),
+                        Row(children: [Text("Las otras cosas")],)
+                      ],
+                    ),
+                  );
+
+
+                }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2
+              ),
+              ),
             ),
 
 
 
           ])
-        )
+        ))
     );
   }
+
+
+
 }

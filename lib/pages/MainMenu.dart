@@ -1,4 +1,5 @@
 import 'package:dishapp/pages/main_menu/Home.dart';
+import 'package:dishapp/pages/main_menu/HomeFlow.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,7 +57,7 @@ class _NavigationExampleState extends State<HomePage> {
       )),
       body: <Widget>[
         /// Home page
-        Home(),
+        HomeWidget(),
 
         /// Notifications page
         const Padding(
