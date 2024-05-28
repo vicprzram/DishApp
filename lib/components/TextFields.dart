@@ -118,6 +118,7 @@ class MainTextFieldState extends State<MainTextField> {
         filled: true,
         fillColor: Colors.white,
 
+
         suffixIcon: (isPassword == false) ? null :
         IconButton(
           icon: Icon(
@@ -144,7 +145,7 @@ class MainTextFieldState extends State<MainTextField> {
         letterSpacing: 0,
       ),
       validator:
-      validator.asValidator(context),
+      validator.asValidator(context)
     );
   }
 }

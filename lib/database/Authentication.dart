@@ -68,25 +68,4 @@ class Authentication {
     }
   }
 
-  static String getUsername (String email)  {
-
-    DatabaseReference databaseReference =
-    FirebaseDatabase.instance.ref('users');
-    databaseReference.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.children;
-      print(data);
-    });
-
-    return 'a';
-    /*
-    DatabaseReference databaseReference = FirebaseDatabase.instance.ref('users');
-    var snapshot = await databaseReference.get();
-    final String username = snapshot.children as String;
-    print(username);
-    if(email.isEmpty == false){
-      return '';
-    }else{
-      return 'null';
-    }*/
-  }
 }

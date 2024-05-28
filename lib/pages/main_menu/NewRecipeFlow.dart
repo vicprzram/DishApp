@@ -2,6 +2,8 @@
 import 'dart:io';
 import 'package:dishapp/database/Authentication.dart';
 import 'package:dishapp/components/TextFields.dart';
+import 'package:dishapp/database/RecipeManagement.dart';
+import 'package:dishapp/utilities/Utilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -31,6 +33,10 @@ class AddrecipeModel extends FlutterFlowModel<AddrecipeWidget> {
   FocusNode? timeFocusNode;
   TextEditingController? timeController;
   String? Function(BuildContext, String?)? timeValidator;
+
+  // Timer
+  List<String> dropdownItems = ["Hours", "Minutes", "Seconds"];
+  late String dropdownValue = dropdownItems[2];
 
   // Diners
   FocusNode? dinersFocusNode;
@@ -68,8 +74,6 @@ class AddrecipeWidget extends StatefulWidget {
 
 class _AddrecipeWidgetState extends State<AddrecipeWidget> {
   late AddrecipeModel _model;
-  List<String> dropdownItems = ["Hours", "Minutes", "Seconds"];
-  late String dropdownValue = dropdownItems[2];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool executed = false;
   int step = 1;
@@ -335,11 +339,44 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
     );
   }
 
+  void addRecipe(){
+    setState(() {
+      Recipe recipe = getData();
+
+      RecipeManagement.pushRecipe(recipe);
+
+      Navigator.pop(context);
+    });
+  }
+
+  Recipe getData(){
+    String title = _model.titleController.text;
+    String description = _model.descriptionController.text;
+    String time = _model.timeController.text;
+    String timer = _model.dropdownValue;
+    String diners = _model.dinersController.text;
+    List<String> ingredients = [];
+
+    for(int i = 0; i < _model.ingredientsController.length; i++){
+      ingredients.add(_model.ingredientsController[i].text);
+    }
+
+    List<String> steps = [];
+
+    for(int i = 0; i < _model.stepsController.length; i++){
+      steps.add(_model.stepsController[i].text);
+    }
+
+
+    return Recipe(FirebaseAuth.instance.currentUser!.displayName, _image, title, description, time, timer, diners, ingredients, steps);
+  }
+
   @override
   Widget build(BuildContext context) {
 
     if(!executed){
       _addIngredient();
+      _addStep();
       executed = true;
     }
 
@@ -352,8 +389,8 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
           backgroundColor: Color(0xfffeeddd),
           title: Text('New Recipe', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
           actions: <Widget>[
-            IconButton(onPressed: () { print( FirebaseAuth.instance.currentUser?.displayName); }, icon: Icon(Icons.send, color: Colors.black,)),
-            IconButton(onPressed: () {  }, icon: Icon(Icons.delete, color: Colors.black,))
+            IconButton(onPressed: () { addRecipe(); }, icon: Icon(Icons.send, color: Colors.black,)),
+            IconButton(onPressed: () { Navigator.pop(context); }, icon: Icon(Icons.delete, color: Colors.black,))
           ],
         ),
         key: scaffoldKey,
@@ -447,9 +484,9 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                         SizedBox(width: 15,),
 
                         DropdownButton(
-                            value: dropdownValue,
+                            value: _model.dropdownValue,
                             //underline: SizedBox(),
-                            items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
+                            items: _model.dropdownItems.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: RichText(
@@ -462,7 +499,7 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                             }).toList(),
                         onChanged: (String? value) {
                           setState(() {
-                            dropdownValue = value!;
+                            _model.dropdownValue = value!;
                           });
                         }
                         )

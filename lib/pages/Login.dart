@@ -93,8 +93,7 @@ class Login extends StatelessWidget {
                     style: TextStyle(color: Colors.grey[700]),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        print("Y nos fuimo");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SplashWidget()));
+                        ForgotPasswordDialog();
                       }),
                   )
                 ]
