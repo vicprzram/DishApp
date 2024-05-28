@@ -107,8 +107,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                       return Container(
                         margin: const EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent),
-                            borderRadius: BorderRadius.circular(29)
+                            border: Border.all(color: Color(0xff59be32)),
+                            borderRadius: BorderRadius.circular(29),
+                            color: Colors.white
                         ),
                         child: Column(
                           children: [
@@ -130,6 +131,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                               Text("Las otras cosas")
                             ],)
                           ],
+
                         ),
                       );
 
