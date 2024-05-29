@@ -1,5 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dishapp/components/TextFields.dart';
 import 'package:dishapp/pages/SignUpFlow.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
@@ -39,14 +44,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => HomeModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
-  }
 
   @override
   void dispose() {
@@ -55,7 +53,51 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.dispose();
   }
 
-  List<String> PRUEBA = ["caca", "caca1", "caca3", "caca4", "caca5", "caca6", "caca7", "caca8"];
+  late List<Map<String, dynamic>> items = [];
+  late List<String> documents = [];
+  bool isLoaded = false;
+
+  void saveItem(String doc) async {
+    DatabaseReference refRealtime = FirebaseDatabase.instance.ref("users");
+
+
+    await refRealtime.set({
+      FirebaseAuth.instance.currentUser?.displayName.toString() : {
+        "recipes": {
+          doc,
+        }
+      }
+    });
+  }
+
+  void addItems() async {
+    List<Map<String, dynamic>> tempList = [];
+    var data = await FirebaseFirestore.instance.collection('recipes').get();
+
+    data.docs.forEach((element) {
+      tempList.add(element.data());
+      documents.add(element.id);
+    });
+
+    setState(() {
+      items = tempList;
+    });
+
+    isLoaded = true;
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+    _model = createModel(context, () => HomeModel());
+
+    _model.textController ??= TextEditingController();
+    _model.textFieldFocusNode ??= FocusNode();
+
+    Timer miTimer = Timer.periodic(Duration(seconds: 3), (timer) {
+      addItems();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,55 +139,81 @@ class _HomeWidgetState extends State<HomeWidget> {
                 )
               ),
 
-                SizedBox(height: 10,),
 
                 Expanded(
-                  child: GridView.builder(
-                    itemCount: PRUEBA.length,
+                  child: (isLoaded && items.length > 0) ? GridView.builder(
+                    itemCount: items.length,
                     itemBuilder: (BuildContext context, int index) {
 
-                      return Container(
-                        margin: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff59be32)),
-                            borderRadius: BorderRadius.circular(29),
-                            color: Colors.white
-                        ),
-                        child: Column(
-                          children: [
-                            Row(children: [
-                              SizedBox(width: 20,),
-                              Text("Usuario")
-                            ],),
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                ),
-                                child: FittedBox(
-                                  child: Image.asset("lib/images/upload_image.png"),
-                                  fit: BoxFit.fill,
-                                )
-                              ),),
-                            Row(children: [
-                              Text("Las otras cosas")
-                            ],)
-                          ],
+                      return InkWell(
+                        onTap: (){
 
+                          print(documents[index]);
+
+                        },
+                        child:  Container(
+                          margin: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xff59be32)),
+                              borderRadius: BorderRadius.circular(29),
+                              color: Colors.white
+                          ),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 5),
+                                  child: RichText(
+                                    text: TextSpan(text: items[index]["title"], style: TextStyle(fontFamily: 'Outfit', color: Colors.black),),
+                                  ),
+                                ),),
+                              Expanded(
+                                child: Container(
+                                  child: Image.network(items[index]["image"], fit: BoxFit.fill),
+                                ),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Padding(padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 20),
+                                      child: RichText(
+                                        text: TextSpan(text: "@" + items[index]["user"], style: TextStyle(fontFamily: 'Outfit', color: Colors.black, fontSize: 12),),
+                                      ),
+                                    ),),
+
+
+
+                                  Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
+                                          child: Container(
+                                            child: InkWell(
+                                              child: Icon(Icons.bookmark_border),
+                                              onTap: () {
+
+                                              },
+                                            ),)
+                                      )
+                                  )
+                                ],)
+                            ],
+
+                          ),
                         ),
                       );
+
+
 
 
                     },
                     padding: EdgeInsets.zero,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 1,
+                      childAspectRatio: 0.90,
                     ),
                     scrollDirection: Axis.vertical,
-                  ),
+                  ) : Text("No data")
                 ),
             ],
           ),
