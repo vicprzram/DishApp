@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dishapp/components/TextFields.dart';
 import 'package:dishapp/pages/SignUpFlow.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -49,30 +50,25 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void dispose() {
     _model.dispose();
-
+    t.cancel();
     super.dispose();
   }
 
   late List<Map<String, dynamic>> items = [];
   late List<String> documents = [];
   bool isLoaded = false;
+  late Timer t;
 
   void saveItem(String doc) async {
-    DatabaseReference refRealtime = FirebaseDatabase.instance.ref("users");
-
-
-    await refRealtime.set({
-      FirebaseAuth.instance.currentUser?.displayName.toString() : {
-        "recipes": {
-          doc,
-        }
-      }
+    FirebaseFirestore.instance.collection("favourites").doc(FirebaseAuth.instance.currentUser!.displayName.toString()).update({
+      "recipes": FieldValue.arrayUnion([doc])
     });
   }
 
   void addItems() async {
     List<Map<String, dynamic>> tempList = [];
     var data = await FirebaseFirestore.instance.collection('recipes').get();
+
 
     data.docs.forEach((element) {
       tempList.add(element.data());
@@ -87,17 +83,19 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     _model = createModel(context, () => HomeModel());
 
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
-    Timer miTimer = Timer.periodic(Duration(seconds: 3), (timer) {
+    t = Timer.periodic(Duration(seconds: 3), (timer) {
       addItems();
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +189,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                             child: InkWell(
                                               child: Icon(Icons.bookmark_border),
                                               onTap: () {
-
+                                                saveItem(documents[index]);
                                               },
                                             ),)
                                       )

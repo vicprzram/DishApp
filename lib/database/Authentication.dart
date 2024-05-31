@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,14 +13,17 @@ class Authentication {
     required Usuario user
   }) async {
     try {
+      List<String> listaVacia = [];
+      Map<String, dynamic> mapaVacio = {"recipes": listaVacia};
       UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: user.email, password: user.password);
       User? u = result.user;
       u?.updateDisplayName(user.username);
-      await FirebaseDatabase.instance.ref('users').set({
+      /*await FirebaseDatabase.instance.ref('users').set({
         user.username : {
           "email" : user.email
         }
-      });
+      });*/
+      await FirebaseFirestore.instance.collection("favourites").doc(user.username).set({"recipes":FieldValue.arrayUnion([])});
       return 'Success';
     } on FirebaseAuthException catch(e){
       if (e.code == 'weak-password') {
