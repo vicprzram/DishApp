@@ -17,7 +17,7 @@ class Authentication {
       Map<String, dynamic> mapaVacio = {"recipes": listaVacia};
       UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: user.email, password: user.password);
       User? u = result.user;
-      u?.updateDisplayName(user.username);
+      u?.updateDisplayName(user.username.toString());
       /*await FirebaseDatabase.instance.ref('users').set({
         user.username : {
           "email" : user.email

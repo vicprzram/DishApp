@@ -122,20 +122,30 @@ class _HomeWidgetState extends State<HomeWidget> {
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(8, 10, 8, 0),
-                child: TextField(
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide.none
+                child:  Container(
+                  decoration: BoxDecoration(),
+                  child: RichText(
+                    textScaler: MediaQuery.of(context).textScaler,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Welcome \"' + FirebaseAuth.instance.currentUser!.displayName.toString() + '\"',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold
+                          ),
+                        )
+                      ],
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Ginger_Cat',
+                        letterSpacing: 0,
+                        fontWeight: FontWeight.w100,
+                        useGoogleFonts: false,
+                      ),
                     ),
-                    hintText: 'Search recipe',
-                    prefixIcon: Icon(Icons.search),
+                    textAlign: TextAlign.start,
                   ),
-                )
-              ),
+                )),
 
 
                 Expanded(

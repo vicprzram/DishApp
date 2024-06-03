@@ -85,6 +85,7 @@ class _NavigationExampleState extends State<HomePage> {
 
         /// Messages page
 
+        Text("caca"),
 
         /// User page
         Card(
