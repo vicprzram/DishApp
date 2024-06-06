@@ -101,7 +101,9 @@ class _RegisterWidgetState extends State<SignUpWidget> {
           SnackBar(content: Text(message))
       );
     }else{
-      SnackBar(content: Text('The passwords do not match'));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("The passwords do not match"))
+      );
     }
   }
 

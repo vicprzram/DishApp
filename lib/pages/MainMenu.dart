@@ -2,6 +2,7 @@ import 'package:dishapp/pages/LoginFlow.dart';
 import 'package:dishapp/pages/main_menu/HomeFlow.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:dishapp/pages/main_menu/Favourites.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,7 +39,7 @@ class _NavigationExampleState extends State<HomePage> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                activeIcon: Icon(Icons.favorite),
+                activeIcon: Icon(Icons.favorite, color: Colors.red),
                 icon: Icon(Icons.favorite_outline),
                 label: 'Favourites',
               ),
@@ -61,6 +62,11 @@ class _NavigationExampleState extends State<HomePage> {
         HomeWidget(),
 
         /// Notifications page
+
+        FavouritesWidget(),
+
+
+        /// Messages page
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -82,10 +88,6 @@ class _NavigationExampleState extends State<HomePage> {
             ],
           ),
         ),
-
-        /// Messages page
-
-        Text("caca"),
 
         /// User page
         Card(

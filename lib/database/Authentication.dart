@@ -18,11 +18,11 @@ class Authentication {
       UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: user.email, password: user.password);
       User? u = result.user;
       u?.updateDisplayName(user.username.toString());
-      /*await FirebaseDatabase.instance.ref('users').set({
+      await FirebaseDatabase.instance.ref('users').update({
         user.username : {
           "email" : user.email
         }
-      });*/
+      });
       await FirebaseFirestore.instance.collection("favourites").doc(user.username).set({"recipes":FieldValue.arrayUnion([])});
       return 'Success';
     } on FirebaseAuthException catch(e){

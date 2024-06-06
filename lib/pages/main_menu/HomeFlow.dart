@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dishapp/components/TextFields.dart';
 import 'package:dishapp/pages/SignUpFlow.dart';
@@ -50,19 +49,32 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void dispose() {
     _model.dispose();
-    t.cancel();
     super.dispose();
   }
 
   late List<Map<String, dynamic>> items = [];
+  late List<String> favourites = [];
   late List<String> documents = [];
   bool isLoaded = false;
-  late Timer t;
 
   void saveItem(String doc) async {
-    FirebaseFirestore.instance.collection("favourites").doc(FirebaseAuth.instance.currentUser!.displayName.toString()).update({
-      "recipes": FieldValue.arrayUnion([doc])
+    if(favourites.contains(doc)){
+      setState(() {
+        favourites.remove(doc);
+        FirebaseFirestore.instance.collection("favourites").doc(FirebaseAuth.instance.currentUser!.displayName.toString()).update({
+          "recipes": favourites
+        });
+      });
+      return;
+    }
+
+    setState(() {
+      FirebaseFirestore.instance.collection("favourites").doc(FirebaseAuth.instance.currentUser!.displayName.toString()).update({
+        "recipes": FieldValue.arrayUnion([doc])
+      });
+      fetchFavourites();
     });
+
   }
 
   void addItems() async {
@@ -82,6 +94,14 @@ class _HomeWidgetState extends State<HomeWidget> {
     isLoaded = true;
   }
 
+  void fetchFavourites() async {
+    var data = await FirebaseFirestore.instance.collection('favourites').doc(FirebaseAuth.instance.currentUser!.displayName).get();
+
+    for(int i = 0; i < data.data()!.values.elementAt(0).length; i++){
+      favourites.add(data.data()!.values.elementAt(0)[i]);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -90,15 +110,15 @@ class _HomeWidgetState extends State<HomeWidget> {
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
-    t = Timer.periodic(Duration(seconds: 3), (timer) {
-      addItems();
-    });
+    fetchFavourites();
+    addItems();
   }
 
 
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -120,36 +140,60 @@ class _HomeWidgetState extends State<HomeWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(8, 10, 8, 0),
-                child:  Container(
-                  decoration: BoxDecoration(),
-                  child: RichText(
-                    textScaler: MediaQuery.of(context).textScaler,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Welcome \"' + FirebaseAuth.instance.currentUser!.displayName.toString() + '\"',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold
-                          ),
-                        )
-                      ],
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Ginger_Cat',
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.w100,
-                        useGoogleFonts: false,
+              Align(alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(8, 10, 8, 0),
+                  child:  Container(
+                    decoration: BoxDecoration(),
+                    child: RichText(
+                      textScaler: MediaQuery.of(context).textScaler,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Welcome \"' + FirebaseAuth.instance.currentUser!.displayName.toString() + '\"',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Ginger_Cat',
+                          letterSpacing: 0,
+                          fontWeight: FontWeight.w100,
+                          useGoogleFonts: false,
+                        ),
                       ),
+                      textAlign: TextAlign.start,
                     ),
-                    textAlign: TextAlign.start,
-                  ),
-                )),
+                  ))),
 
+              FutureBuilder(
+                future: Future.delayed(Duration(milliseconds: 500)),
+                builder: (ctx, snapshot) =>
+                snapshot.connectionState == ConnectionState.waiting
+                    ? CircularProgressIndicator() :
+                    (items.length == 0) ? Align(
+                      alignment: AlignmentDirectional(0, 0),
+                      child: Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
 
+                      child: Container(
+                        height: 350,
+                        decoration: BoxDecoration(),
+                        child: Align(
+                          alignment: AlignmentDirectional(0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              'lib/images/no_data.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )) :
                 Expanded(
-                  child: (isLoaded && items.length > 0) ? GridView.builder(
+                  child: GridView.builder(
                     itemCount: items.length,
                     itemBuilder: (BuildContext context, int index) {
 
@@ -191,13 +235,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     ),),
 
 
-
+                                  (FirebaseAuth.instance.currentUser!.displayName.toString() == items[index]["user"]) ?
+                                  Container() :
                                   Align(
                                       alignment: Alignment.bottomRight,
                                       child: Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
                                           child: Container(
                                             child: InkWell(
-                                              child: Icon(Icons.bookmark_border),
+                                              child: Icon( (favourites.contains(documents[index])) ? Icons.bookmark : Icons.bookmark_border),
                                               onTap: () {
                                                 saveItem(documents[index]);
                                               },
@@ -221,8 +266,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                       childAspectRatio: 0.90,
                     ),
                     scrollDirection: Axis.vertical,
-                  ) : Text("No data")
+                  )
                 ),
+              )
             ],
           ),
         ),
