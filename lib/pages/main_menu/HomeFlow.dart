@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dishapp/components/TextFields.dart';
 import 'package:dishapp/pages/SignUpFlow.dart';
+import 'package:dishapp/pages/main_menu/RecipeInspect.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -200,7 +201,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       return InkWell(
                         onTap: (){
 
-                          print(documents[index]);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => InspectWidget(ID: documents[index])));
 
                         },
                         child:  Container(

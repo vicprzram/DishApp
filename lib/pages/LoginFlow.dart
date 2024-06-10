@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../components/ImagesLogin.dart';
 import 'package:dishapp/database/Authentication.dart';
 import 'MainMenu.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginModel extends FlutterFlowModel<LoginWidget> {
 
@@ -75,6 +76,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message))
     );  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -160,24 +162,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
 
-              Align(
-                alignment: AlignmentDirectional(1, 0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 5, 25, 0),
-                  child: RichText(text: TextSpan(
-                      text: 'Forgot password?',
-                      style: FlutterFlowTheme.of(context).labelLarge.override(
-                        fontFamily: 'Outfit',
-                        letterSpacing: 0,
-                        color: Colors.grey[700]
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          print("Y nos fuimo");
-                        }),
-                  )
-                ),
-              ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20, 30, 20, 0),
                 child: FFButtonWidget(
@@ -206,57 +190,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
 
-              Padding(padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                child: Row(
-                  children: [
-                    Expanded(child: Divider(
-                      thickness: 1,
-                      color: Colors.grey[400],
-                    ),),
-
-                    Padding(padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: RichText(
-                          text: TextSpan(
-                              text: 'Or continue with',
-                              style: FlutterFlowTheme.of(context).labelLarge.override(
-                                  fontFamily: 'Outfit',
-                                  letterSpacing: 0,
-                              ),
-                        ))),
-
-                    Expanded(child: Divider(
-                      thickness: 1,
-                      color: Colors.grey[400],
-                    ),),
-                  ],
-                )),
-
-              Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                  child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    InkWell(
-                      child: ImagesLogin(imagePath: "lib/images/google_logo.png"),
-                      onTap: (){
-                        print("Se ha clicado \"Google\"");
-                      },
-                    ),
-
-                    const SizedBox(width: 20,),
-
-                    InkWell(
-                      child: ImagesLogin(imagePath: "lib/images/apple_logo.png"),
-                      onTap: (){
-                        print("Se ha clicado \"Apple\"");
-                      },
-                    )
-                  ],)),
-
-
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
-                child: RichText(text: TextSpan(
+                Expanded(child: Align(alignment: Alignment.bottomCenter,
+                child: Padding(padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20), child: RichText(text: TextSpan(
                   style: FlutterFlowTheme.of(context).labelLarge.override(
                     fontFamily: 'Outfit',
                     letterSpacing: 0,
@@ -283,7 +218,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ],
                 ),
                 )
-              ),
+              ))),
             ],
           ),
         ),

@@ -277,6 +277,12 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
     _model.descriptionController ??= TextEditingController();
     _model.descriptionFocusNode ??= FocusNode();
 
+    _model.timeController ??= TextEditingController();
+    _model.timeFocusNode ??= FocusNode();
+
+    _model.dinersController ??= TextEditingController();
+    _model.dinersFocusNode ??= FocusNode();
+
   }
 
   @override
@@ -350,11 +356,12 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
   }
 
   Recipe getData(){
+
     String title = _model.titleController.text;
     String description = _model.descriptionController.text;
-    String time = _model.timeController.text;
+    String time = _model.timeController.text.toString();
     String timer = _model.dropdownValue;
-    String diners = _model.dinersController.text;
+    String diners = _model.dinersController.text.toString();
     List<String> ingredients = [];
 
     for(int i = 0; i < _model.ingredientsController.length; i++){
@@ -525,9 +532,9 @@ class _AddrecipeWidgetState extends State<AddrecipeWidget> {
                           width: 60,
                           height: 50,
                           child: MainTextField(
-                              controller: _model.timeController,
-                              focus: _model.timeFocusNode,
-                              validator: _model.timeValidator,
+                              controller: _model.dinersController,
+                              focus: _model.dinersFocusNode,
+                              validator: _model.dinersValidator,
                               label: '',
                               isPassword: false,
                               textAlign: TextAlign.center,

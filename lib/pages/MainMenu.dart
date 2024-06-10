@@ -44,11 +44,6 @@ class _NavigationExampleState extends State<HomePage> {
                 label: 'Favourites',
               ),
               BottomNavigationBarItem(
-                activeIcon: Icon(Icons.shopping_cart),
-                icon: Icon(Icons.shopping_cart_outlined),
-                label: 'Cart',
-              ),
-              BottomNavigationBarItem(
                 activeIcon: Icon(Icons.person),
                 icon: Icon(Icons.person_outline),
                 label: 'User',
@@ -65,29 +60,6 @@ class _NavigationExampleState extends State<HomePage> {
 
         FavouritesWidget(),
 
-
-        /// Messages page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
 
         /// User page
         Card(

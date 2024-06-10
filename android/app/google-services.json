@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "20670541569",
+    "firebase_url": "https://dishapp-c9fa1-default-rtdb.firebaseio.com",
     "project_id": "dishapp-c9fa1",
     "storage_bucket": "dishapp-c9fa1.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "20670541569-ffbeft8r9e02cj4vq8uro02d3p6cjd5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dishapp",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
         {
           "client_id": "20670541569-j1v0pjfdaicetd8hlbh2kct0m45ak031.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +38,57 @@
             {
               "client_id": "20670541569-j1v0pjfdaicetd8hlbh2kct0m45ak031.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "20670541569-f1q3koaokcu4shasmibg3hpkr5aop3sn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.dishapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20670541569:android:cbcdb2731fa589fc09b500",
+        "android_client_info": {
+          "package_name": "com.mycompany.dishapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20670541569-tg6qqh7ap6qg159rmlnjjukdisqjpvpk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.dishapp",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "20670541569-j1v0pjfdaicetd8hlbh2kct0m45ak031.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQtfvxxxMhjqVTzGOYWOCUUYxRzCczUOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20670541569-j1v0pjfdaicetd8hlbh2kct0m45ak031.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "20670541569-f1q3koaokcu4shasmibg3hpkr5aop3sn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.dishapp"
+              }
             }
           ]
         }
