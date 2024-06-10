@@ -67,7 +67,13 @@ class _NavigationExampleState extends State<HomePage> {
           margin: const EdgeInsets.all(8.0),
           child: SizedBox.expand(
             child: Center(
-              child: FloatingActionButton.extended(onPressed: () { FirebaseAuth.instance.signOut(); Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginWidget())); }, label: Text("Logout"))
+              child: InkWell(
+              onTap: () {
+
+           FirebaseAuth.instance.signOut(); Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginWidget()));
+              },
+              child: Image.asset("lib/images/log_out.png"))
+
             ),
           ),
         ),
